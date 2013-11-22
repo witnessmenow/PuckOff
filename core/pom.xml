@@ -12,11 +12,24 @@
 	<packaging>jar</packaging>
 	<name>PuckOff Core</name>
 
+	<repositories>
+    	<repository>
+      		<id>in-project</id>
+      		<name>In Project Repo</name>
+      		<url>file://${project.basedir}/localJars</url>
+    	</repository>
+    </repositories>
+	
 	<dependencies>
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx</artifactId>
 			<version>${gdx.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>extensions</groupId>
+			<artifactId>gdx-controllers</artifactId>
+			<version>0.9.9</version>
 		</dependency>
 	</dependencies>
 
