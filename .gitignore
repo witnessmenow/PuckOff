@@ -1,0 +1,41 @@
+#################
+## Eclipse
+#################
+*.iml
+
+*.pydevproject
+.project
+.metadata
+bin/
+target/
+tmp/
+gen/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.idea/
+.loadpath
+.class
+.so
+
+android/libs/
+
+html/target/
+html/src/main/webapp/com.ladinc.puckoff.PuckOff/
+html/src/main/gwt-unitCache/
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+.cproject
+
+# PDT-specific
+.buildpath
