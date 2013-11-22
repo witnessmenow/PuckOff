@@ -21,6 +21,8 @@ public class GamePadControls implements IControls
 	public GamePadControls(GenericControllerListener listen)
 	{
 		this.listener = listen;
+		this.leftMovement = new Vector2(0,0);
+		this.rightMovement = new Vector2(0,0);
 	}
 	
 	private void activateController()
@@ -46,13 +48,15 @@ public class GamePadControls implements IControls
 	
 	public void setAnalogMovementY(AnalogStick stick, float y)
 	{
+		//inverting direction so up is up
+		
 		switch(stick)
 		{
 			case left:
-				leftMovement.y = processAndActivate(y, TRIGGER_DEADZONE);
+				leftMovement.y = (-1)*(processAndActivate(y, TRIGGER_DEADZONE));
 				break;
 			case right:
-				rightMovement.y = processAndActivate(y, TRIGGER_DEADZONE);
+				rightMovement.y = (-1)*(processAndActivate(y, TRIGGER_DEADZONE));
 				break;
 		
 		}

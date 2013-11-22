@@ -25,7 +25,7 @@ public class Rink
 		
 		BodyDef bd = new BodyDef();
 	    bd.position.set(0, 0);
-	    bd.type = BodyType.StaticBody;
+	    //bd.type = BodyType.DynamicBody;
 	    
 	    FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.density = 1.0f;

@@ -1,5 +1,8 @@
 package com.ladinc.puckoff.core.screens;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
@@ -9,6 +12,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.puckoff.core.PuckOff;
+import com.ladinc.puckoff.core.controls.IControls;
+import com.ladinc.puckoff.core.objects.HockeyPlayer;
 import com.ladinc.puckoff.core.objects.Rink;
 
 public class HockeyScreen implements Screen 
@@ -34,6 +39,8 @@ public class HockeyScreen implements Screen
     private Vector2 center;
     
     private PuckOff game;
+    
+    public List<HockeyPlayer> hockeyPlayerList;
     
     public HockeyScreen(PuckOff game)
     {
@@ -64,6 +71,11 @@ public class HockeyScreen implements Screen
 		
 		world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
         world.clearForces();
+        
+        for(HockeyPlayer hp: hockeyPlayerList)
+		{
+        	hp.updateMovement(delta);
+		}
         
 		this.spriteBatch.begin();
 		
@@ -100,6 +112,43 @@ public class HockeyScreen implements Screen
 		
 		spriteBatch = new SpriteBatch();
 		
+		createPlayers();
+		
+		
+		
+	}
+	
+	private void createPlayers()
+	{
+		Gdx.app.debug("Hockey Screen", "createPlayers()");
+		
+		if(hockeyPlayerList == null)
+		{
+			hockeyPlayerList= new ArrayList<HockeyPlayer>();		
+		}
+		
+		int nextPlayerNumber = this.hockeyPlayerList.size() + 1;
+		
+		for(IControls ic : this.game.controllerManager.inActiveControls)
+		{
+			Gdx.app.debug("Hockey Screen", "createPlayers() - looping through controllers");
+			
+			boolean controllerHasPlayer = false;
+			for(HockeyPlayer hp: hockeyPlayerList)
+			{
+				Gdx.app.debug("Hockey Screen", "createPlayers() - checking to see is controller already assigned");
+				 if(hp.controller == ic)
+					 controllerHasPlayer = true;
+				 
+			 }
+			
+			if(!controllerHasPlayer)
+			{
+				Gdx.app.debug("Hockey Screen", "createPlayers() - creating new player");
+				hockeyPlayerList.add(new HockeyPlayer(world, nextPlayerNumber, ic, this.center));
+				nextPlayerNumber++;
+			}
+		}
 	}
 
 	@Override

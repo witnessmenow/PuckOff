@@ -1,6 +1,8 @@
 package com.ladinc.puckoff.core;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.ladinc.puckoff.core.controls.MyControllerManager;
 import com.ladinc.puckoff.core.screens.HockeyScreen;
 
@@ -15,6 +17,8 @@ public class PuckOff extends Game {
 	@Override
 	public void create () 
 	{
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		
 		controllerManager = new MyControllerManager();
 		
 		createScreens();
