@@ -43,7 +43,7 @@ public class GenericControllerListener implements ControllerListener
 		else if (arg1 == LeftAxisY)
 			controls.setAnalogMovementY(AnalogStick.left, arg2);
 		else if (arg1 == RightAxisX)
-			controls.setAnalogMovementY(AnalogStick.right, arg2);
+			controls.setAnalogMovementX(AnalogStick.right, arg2);
 		else if (arg1 == RightAxisY)
 			controls.setAnalogMovementY(AnalogStick.right, arg2);
 				

@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.puckoff.core.PuckOff;
 import com.ladinc.puckoff.core.controls.IControls;
 import com.ladinc.puckoff.core.objects.HockeyPlayer;
+import com.ladinc.puckoff.core.objects.Puck;
 import com.ladinc.puckoff.core.objects.Rink;
 
 public class HockeyScreen implements Screen 
@@ -24,8 +25,6 @@ public class HockeyScreen implements Screen
     private World world;
     
     private Box2DDebugRenderer debugRenderer;
-    
-    private Rink rink;
     
     //Used for sprites etc
 	private int screenWidth;
@@ -40,7 +39,10 @@ public class HockeyScreen implements Screen
     
     private PuckOff game;
     
+    //Game Actor Objects
     public List<HockeyPlayer> hockeyPlayerList;
+    private Rink rink;
+    private Puck puck;
     
     public HockeyScreen(PuckOff game)
     {
@@ -76,6 +78,8 @@ public class HockeyScreen implements Screen
 		{
         	hp.updateMovement(delta);
 		}
+        
+        this.puck.update();
         
 		this.spriteBatch.begin();
 		
@@ -113,7 +117,7 @@ public class HockeyScreen implements Screen
 		spriteBatch = new SpriteBatch();
 		
 		createPlayers();
-		
+		this.puck = new Puck(world, this.center);
 		
 		
 	}
