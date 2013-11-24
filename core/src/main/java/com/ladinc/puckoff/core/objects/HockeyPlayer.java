@@ -108,7 +108,7 @@ public class HockeyPlayer {
 //		revoJoint.localAnchorA.set(stick.getWorldCenter());
 		
 		revoJoint.motorSpeed = 0;
-		revoJoint.maxMotorTorque = 1000f;
+		revoJoint.maxMotorTorque = 10000f;
 		revoJoint.enableLimit = false;
 		revoJoint.enableMotor = true;
 		
@@ -262,7 +262,7 @@ public class HockeyPlayer {
 		
 		float direction = 1.0f;
 		
-		if(angleStick == angleMovement)
+		if(angleStick + 10f >= angleMovement &&  angleStick - 10f <= angleMovement)
 		{
 			//nothing to do
 			Vector2 currentForce = this.stick.getLinearVelocity();
