@@ -10,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
+import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.ladinc.puckoff.core.controls.IControls;
 
@@ -32,6 +34,9 @@ public class HockeyPlayer {
 	Vector2 startPos;
 	
 	private float power;
+
+	
+	private MouseJoint movementJoint;
 	
 	public HockeyPlayer(World world, int number, IControls controller, Vector2 startPos)
 	{
@@ -108,6 +113,33 @@ public class HockeyPlayer {
 		revoJoint.enableMotor = true;
 		
 		world.createJoint(revoJoint);
+		
+		
+	}
+	
+	private void createMovementJoint(Vector2 jointStartPoint)
+	{
+		MouseJointDef def = new MouseJointDef();
+		
+		//Body A is not used at all, it just needs a body (any body).
+		def.bodyA = this.body;
+		def.bodyB = this.stick;
+		//def.collideConnected = true;
+		def.maxForce = 1000.0f * stick.getMass();
+		
+		def.target.set(jointStartPoint.x, jointStartPoint.y);
+		
+		this.movementJoint = (MouseJoint)world.createJoint(def);
+	}
+	
+	private void destroyMovementJoint()
+	{
+		if(this.movementJoint != null)
+		{
+			world.destroyJoint(movementJoint);
+			this.movementJoint = null;
+		}
+		
 	}
 	
 	public void updateMovement(float delta)
@@ -122,17 +154,136 @@ public class HockeyPlayer {
 		this.body.applyForce(this.body.getWorldVector(new Vector2(forceVector.x, forceVector.y)), position, true );
 		
 		
-		updateStick(delta, rotation);
+		updateStick(delta, rotation, position);
 	}
 	
-	public void updateStick(float delta, Vector2 rotation)
+	public void updateStick(float delta, Vector2 rotation, Vector2 playerPosition)
 	{
 		Gdx.app.debug("HockeyPlayer - updateStick", "rotation: x=" + String.valueOf(rotation.x) + " y=" + String.valueOf(rotation.y));
 		
-		Vector2 forceVector= new Vector2(this.stickPower*rotation.x, this.stickPower*rotation.y);
+//		if(rotation.x == 0f && rotation.y == 0)
+//		{
+//			//No movement detected, get rid of mouse joint
+//			destroyMovementJoint();
+//		}
+//		else
+//		{
+//			//Movement Square size
+//			float movementSquareMax = 6f;
+//			Vector2 moveForce = new Vector2(rotation.x * movementSquareMax, rotation.y * movementSquareMax);
+//			Vector2 moveLocation = new Vector2(playerPosition.x + moveForce.x, playerPosition.y + moveForce.y);
+//			
+//			Vector2 position= this.stick.getWorldCenter();
+//			
+//			float xDiff = position.x - moveLocation.x;
+//			if (xDiff < 0)
+//				xDiff = xDiff * (-1);
+//			
+//			float yDiff = position.y - moveLocation.y;
+//			if (yDiff < 0)
+//				yDiff = yDiff * (-1);
+//			
+//			
+//			if(xDiff > movementSquareMax)
+//			{
+//				if(position.x < moveLocation.x)
+//				{
+//					moveLocation.x -= movementSquareMax;		
+//				}
+//				else
+//				{
+//					moveLocation.x += movementSquareMax;
+//				}
+//				
+//				if(moveLocation.y < 0)
+//				{
+//					moveLocation.y = playerPosition.y + (-1)*movementSquareMax;
+//				}
+//				else
+//				{
+//					moveLocation.y = playerPosition.y + movementSquareMax;
+//				}
+//			}
+//			else if(yDiff > movementSquareMax)
+//			{
+//				if(position.y < moveLocation.y)
+//				{
+//					moveLocation.y -= movementSquareMax;		
+//				}
+//				else
+//				{
+//					moveLocation.y += movementSquareMax;
+//				}
+//				
+//				if(moveLocation.x < 0)
+//				{
+//					moveLocation.x = playerPosition.x + (-1)*movementSquareMax;
+//				}
+//				else
+//				{
+//					moveLocation.x = playerPosition.x + movementSquareMax;
+//				}	
+//			}
+//			
+//			//Movement Detected
+//			if(this.movementJoint == null)
+//			{
+//				createMovementJoint(position);
+//			}
+//			else
+//			{
+//				movementJoint.setTarget(moveLocation);
+//			}
+		
+		
+		if(rotation.x == 0f && rotation.y == 0)
+		{
+			//No movement detected
+			return;
+		}
+		
+		//Movement Square size
+		float movementSquareMax = 6f;
+		Vector2 moveForce = new Vector2(rotation.x * movementSquareMax, rotation.y * movementSquareMax);
+		//Vector2 moveLocation = new Vector2(playerPosition.x + moveForce.x, playerPosition.y + moveForce.y);
 		Vector2 position= this.stick.getWorldCenter();
 		
-		//position.x = position.x + 2f;
+//		float crossToStick = playerPosition.crs(position);
+//		float crossToMovement = playerPosition.crs(moveLocation);
+//			
+//		Gdx.app.debug("HockeyPlayer - Cross Stuff", "rotation: crossToStick=" + String.valueOf(crossToStick) + " crossToMovement=" + String.valueOf(crossToMovement));	
+		
+		//stickPositionRelativeToPlayer
+		Vector2 stickRelativePlayer = new Vector2(position.x - playerPosition.x, position.y - playerPosition.y);
+		float angleStick = stickRelativePlayer.angle();
+		float angleMovement = moveForce.angle();
+		
+		Gdx.app.debug("HockeyPlayer - Angle Stuff", "rotation: angleStick=" + String.valueOf(angleStick) + " angleMovement=" + String.valueOf(angleMovement));	
+		
+		float direction = 1.0f;
+		
+		if(angleStick == angleMovement)
+		{
+			//nothing to do
+			Vector2 currentForce = this.stick.getLinearVelocity();
+			this.stick.applyForce(this.stick.getWorldVector(new Vector2(currentForce.x * (-1), currentForce.y * (-1))), position, true );
+			
+			return;
+		}
+		else if(angleStick > angleMovement)
+		{
+			if(angleMovement + 180f < angleStick)
+				direction = -1.0f;
+		}
+		else
+		{
+			if(angleMovement - 180f < angleStick)
+				direction = -1.0f;
+		}
+		
+		Vector2 forceVector= new Vector2(0.0f, this.stickPower*direction);
 		this.stick.applyForce(this.stick.getWorldVector(new Vector2(forceVector.x, forceVector.y)), position, true );
+		
+
 	}
 }
