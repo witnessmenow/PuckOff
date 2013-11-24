@@ -1,5 +1,6 @@
 <module rename-to='puckoff'>
 	<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
+	<inherits name='com.badlogic.gdx.controllers.controllers-gwt'/>
 
 	<source path='core'/>
 	<source path='html'/>
@@ -7,6 +8,7 @@
 	<public path="resources" />
 
 	<entry-point class='com.ladinc.puckoff.html.PuckOffHtml'/>
-	<set-configuration-property name="gdx.assetpath" value="assets" />
-	<set-configuration-property name="gdx.assetoutputpath" value="html/target/webapp" />
+	<set-configuration-property name="gdx.assetpath" value="E:/Code/Github/PuckOff/assets" />
+<!-- 	<set-configuration-property name="gdx.assetoutputpath" value="html/target/webapp" /> -->
+	<set-configuration-property name="gdx.assetoutputpath" value="html/src/main/webapp" />
 </module>

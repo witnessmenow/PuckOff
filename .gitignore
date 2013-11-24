@@ -26,6 +26,9 @@ android/libs/
 
 html/target/
 html/src/main/webapp/com.ladinc.puckoff.PuckOff/
+html/src/main/webapp/assets/
+html/src/main/webapp/PuckOff/
+html/src/main/webapp/war/
 html/src/main/gwt-unitCache/
 
 # External tool builders
