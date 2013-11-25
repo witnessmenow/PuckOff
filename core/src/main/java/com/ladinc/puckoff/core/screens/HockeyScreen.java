@@ -112,7 +112,7 @@ public class HockeyScreen implements Screen
 	public void show() {
 		world = new World(new Vector2(0.0f, 0.0f), true);
 		
-		this.rink = new Rink(world);
+		this.rink = new Rink(world, this.worldHeight, this.worldWidth);
 		
 		spriteBatch = new SpriteBatch();
 		

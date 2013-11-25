@@ -262,7 +262,7 @@ public class HockeyPlayer {
 		
 		float direction = 1.0f;
 		
-		if(angleStick + 10f >= angleMovement &&  angleStick - 10f <= angleMovement)
+		if(angleStick + 6f >= angleMovement &&  angleStick - 6f <= angleMovement)
 		{
 			//nothing to do
 			Vector2 currentForce = this.stick.getLinearVelocity();
