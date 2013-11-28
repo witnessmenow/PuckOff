@@ -11,7 +11,9 @@ public interface IControls
 	
 	public boolean getDivePressed();
 	
+	public boolean isActive();
 	
+	public boolean isRotationRelative();
 	
 	//TODO: Add start etc
 

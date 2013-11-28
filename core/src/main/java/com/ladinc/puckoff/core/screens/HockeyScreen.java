@@ -71,6 +71,11 @@ public class HockeyScreen implements Screen
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
 		
+		if(this.game.controllerManager.checkForNewControllers())
+		{
+			createPlayers();
+		}
+		
 		world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
         world.clearForces();
         
@@ -133,7 +138,7 @@ public class HockeyScreen implements Screen
 		
 		int nextPlayerNumber = this.hockeyPlayerList.size() + 1;
 		
-		for(IControls ic : this.game.controllerManager.inActiveControls)
+		for(IControls ic : this.game.controllerManager.controls)
 		{
 			Gdx.app.debug("Hockey Screen", "createPlayers() - looping through controllers");
 			
@@ -149,7 +154,7 @@ public class HockeyScreen implements Screen
 			if(!controllerHasPlayer)
 			{
 				Gdx.app.debug("Hockey Screen", "createPlayers() - creating new player");
-				hockeyPlayerList.add(new HockeyPlayer(world, nextPlayerNumber, ic, this.center));
+				hockeyPlayerList.add(new HockeyPlayer(world, nextPlayerNumber, ic, this.center, this.camera));
 				nextPlayerNumber++;
 			}
 		}

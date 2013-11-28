@@ -1,8 +1,10 @@
 package com.ladinc.puckoff.core.objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -35,12 +37,15 @@ public class HockeyPlayer {
 	
 	private float power;
 
+	private OrthographicCamera camera;
 	
 	private MouseJoint movementJoint;
 	
-	public HockeyPlayer(World world, int number, IControls controller, Vector2 startPos)
+	public HockeyPlayer(World world, int number, IControls controller, Vector2 startPos, OrthographicCamera camera)
 	{
 		playerNumber = number;
+		
+		this.camera = camera;
 		
 		this.world = world;
 		this.controller = controller;
@@ -157,6 +162,8 @@ public class HockeyPlayer {
 		updateStick(delta, rotation, position);
 	}
 	
+	private Vector3 tempVec = new Vector3(0.0f,0.0f,0.0f);
+	
 	public void updateStick(float delta, Vector2 rotation, Vector2 playerPosition)
 	{
 		Gdx.app.debug("HockeyPlayer - updateStick", "rotation: x=" + String.valueOf(rotation.x) + " y=" + String.valueOf(rotation.y));
@@ -244,7 +251,20 @@ public class HockeyPlayer {
 		
 		//Movement Square size
 		float movementSquareMax = 6f;
-		Vector2 moveForce = new Vector2(rotation.x * movementSquareMax, rotation.y * movementSquareMax);
+		Vector2 moveForce;
+		
+		if(controller.isRotationRelative())
+		{
+			tempVec.set(rotation.x, rotation.y, 0);
+			camera.unproject(tempVec);
+			moveForce =  new Vector2(tempVec.x/PIXELS_PER_METER - playerPosition.x, tempVec.y/PIXELS_PER_METER - playerPosition.y);
+			Gdx.app.debug("HockeyPlayer - Rotation Relative", "moveForce: x=" + String.valueOf(moveForce.x) + " y=" + String.valueOf(moveForce.y));	
+		}
+		else
+		{
+			moveForce = new Vector2(rotation.x * movementSquareMax, rotation.y * movementSquareMax);
+			
+		}
 		//Vector2 moveLocation = new Vector2(playerPosition.x + moveForce.x, playerPosition.y + moveForce.y);
 		Vector2 position= this.stick.getWorldCenter();
 		

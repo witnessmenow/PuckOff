@@ -137,4 +137,15 @@ public class GamePadControls implements IControls
 		return divePressed;
 	}
 
+	@Override
+	public boolean isActive() {
+		return this.active;
+	}
+
+	@Override
+	public boolean isRotationRelative() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

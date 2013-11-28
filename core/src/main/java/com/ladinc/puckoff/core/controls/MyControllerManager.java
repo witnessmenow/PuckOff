@@ -2,10 +2,13 @@ package com.ladinc.puckoff.core.controls;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
+import com.ladinc.puckoff.core.controls.listeners.KeyboardAndMouseListener;
+import com.ladinc.puckoff.core.controls.listeners.ListenerForNewControllers;
 import com.ladinc.puckoff.core.controls.listeners.desktop.XboxListener;
 import com.ladinc.puckoff.core.controls.listeners.ouya.OuyaListener;
 
@@ -33,10 +36,15 @@ public class MyControllerManager {
             
 
         }
-		
+        if(Gdx.app.getType() == ApplicationType.Desktop)
+        {
+        	KeyboardAndMouseListener inputProcess = new KeyboardAndMouseListener();
+        	inActiveControls.add(inputProcess.controls);
+        	Gdx.input.setInputProcessor(inputProcess);
+        }
 	}
 	
-	private void addControllerToList(Controller controller)
+	public void addControllerToList(Controller controller)
     {
 		switch (Gdx.app.getType())
 		{
@@ -69,5 +77,26 @@ public class MyControllerManager {
 		
 		}
     }
+	
+	public boolean checkForNewControllers()
+	{
+		ArrayList<IControls> tempControllers = (ArrayList<IControls>) inActiveControls.clone();
+		boolean foundNew = false;
+		
+		for (IControls cont : tempControllers) 
+		{
+			if(cont.isActive())
+			{
+				if(!this.controls.contains(cont))
+				{
+					this.controls.add(cont);
+					this.inActiveControls.remove(cont);
+					foundNew = true;
+				}
+			}
+		}
+		
+		return foundNew;
+	}
 	
 }
