@@ -3,7 +3,9 @@ package com.ladinc.puckoff.core.screens;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,10 +14,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.puckoff.core.PuckOff;
+import com.ladinc.puckoff.core.ai.SimpleAi;
 import com.ladinc.puckoff.core.controls.IControls;
 import com.ladinc.puckoff.core.objects.HockeyPlayer;
 import com.ladinc.puckoff.core.objects.Puck;
 import com.ladinc.puckoff.core.objects.Rink;
+import com.ladinc.puckoff.core.utilities.DebugUtilities;
 
 public class HockeyScreen implements Screen 
 {
@@ -43,6 +47,7 @@ public class HockeyScreen implements Screen
     public List<HockeyPlayer> hockeyPlayerList;
     private Rink rink;
     private Puck puck;
+    private List<SimpleAi> AiList;
     
     public HockeyScreen(PuckOff game)
     {
@@ -62,7 +67,7 @@ public class HockeyScreen implements Screen
         this.debugRenderer = new Box2DDebugRenderer();
     }
     
-    
+    private float aiCoolDown = 0;
     
     //This is the main game loop, it is repeatedly called
 	@Override
@@ -70,6 +75,17 @@ public class HockeyScreen implements Screen
 	{
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
+		
+		if(aiCoolDown != 0)
+		{
+			aiCoolDown -= delta;
+		}
+		
+		if(Gdx.input.isKeyPressed(Input.Keys.NUM_0) && aiCoolDown == 0)
+		{
+			aiCoolDown = 0.5f;
+			createAIPlayer();
+		}
 		
 		if(this.game.controllerManager.checkForNewControllers())
 		{
@@ -79,6 +95,11 @@ public class HockeyScreen implements Screen
 		world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
         world.clearForces();
         
+        for(SimpleAi ai: AiList)
+        {
+        	ai.movementFollowPuck(ai.player.body.getWorldCenter(), this.puck.body.getWorldCenter());
+        }
+        
         for(HockeyPlayer hp: hockeyPlayerList)
 		{
         	hp.updateMovement(delta);
@@ -86,25 +107,56 @@ public class HockeyScreen implements Screen
         
         this.puck.update();
         
+        
+        world.step(Gdx.app.getGraphics().getDeltaTime(), 100, 100);
+        //world.clearForces();
+        //world.step(1/60f, 3, 3);
+        world.clearForces();
 		this.spriteBatch.begin();
 		
 		renderSprites(this.spriteBatch);
 		
 		this.spriteBatch.end();
 		
+		
+		
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,PIXELS_PER_METER));
+		
+		
 		
 	}
 	
 	//Sprites are drawn in order, so something drawn first will be bottom of the pile so to speak i.e. draw background first
 	private void renderSprites(SpriteBatch spriteBatch)
     {
+		if(Gdx.app.getLogLevel() == Application.LOG_DEBUG)
+			DebugUtilities.renderFPSCounter(spriteBatch, this.camera);
+		
 		//Sets the background colour of the canvas
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
         this.rink.rinkImage.draw(spriteBatch);
     }
+	
+	private void createAIPlayer()
+	{
+		if(AiList == null)
+		{
+			AiList = new ArrayList<SimpleAi>();
+		}
+		
+		SimpleAi ai = new SimpleAi();
+		AiList.add(ai);
+		
+		int nextPlayerNumber = this.hockeyPlayerList.size() + 1;
+		
+		HockeyPlayer hp = new HockeyPlayer(world, nextPlayerNumber, ai, this.center, this.camera);
+		hockeyPlayerList.add(hp);
+		
+		ai.player = hp;
+		
+	}
 
 	@Override
 	public void resize(int width, int height) {
@@ -124,7 +176,10 @@ public class HockeyScreen implements Screen
 		createPlayers();
 		this.puck = new Puck(world, this.center);
 		
-		
+		if(AiList == null)
+		{
+			AiList = new ArrayList<SimpleAi>();
+		}
 	}
 	
 	private void createPlayers()

@@ -32,7 +32,7 @@ public class Puck
 	    fixtureDef.shape = dynamicCircle;  
 	    fixtureDef.density = 0.25f;  
 	    fixtureDef.friction = 0f;  
-	    fixtureDef.restitution = 1f;
+	    fixtureDef.restitution = 0.5f;
 	    
 	    this.body.createFixture(fixtureDef);
 	    

@@ -257,6 +257,8 @@ public class HockeyPlayer {
 		{
 			tempVec.set(rotation.x, rotation.y, 0);
 			camera.unproject(tempVec);
+			
+			//Camera unproject gives us cameras co-ordinates of the input, this needs to be converted to Box2d co-ords 
 			moveForce =  new Vector2(tempVec.x/PIXELS_PER_METER - playerPosition.x, tempVec.y/PIXELS_PER_METER - playerPosition.y);
 			Gdx.app.debug("HockeyPlayer - Rotation Relative", "moveForce: x=" + String.valueOf(moveForce.x) + " y=" + String.valueOf(moveForce.y));	
 		}
