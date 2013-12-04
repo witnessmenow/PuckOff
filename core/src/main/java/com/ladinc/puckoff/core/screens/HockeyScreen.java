@@ -76,12 +76,12 @@ public class HockeyScreen implements Screen
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
 		
-		if(aiCoolDown != 0)
+		if(aiCoolDown > 0)
 		{
 			aiCoolDown -= delta;
 		}
 		
-		if(Gdx.input.isKeyPressed(Input.Keys.NUM_0) && aiCoolDown == 0)
+		if(Gdx.input.isKeyPressed(Input.Keys.NUM_0) && aiCoolDown <= 0)
 		{
 			aiCoolDown = 0.5f;
 			createAIPlayer();
