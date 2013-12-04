@@ -49,7 +49,7 @@ public class Rink
 	
 	private Sprite getRinkSprite()
     {
-    	Texture rinkTexture = new Texture(Gdx.files.internal("Images/Objects/IceRinkOffSet.png"));
+    	Texture rinkTexture = new Texture(Gdx.files.internal("Images/Objects/IceRinkOffSet1.png"));
     	
     	return new Sprite(rinkTexture);
     }

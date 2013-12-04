@@ -2,7 +2,10 @@ package com.ladinc.puckoff.core.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -26,6 +29,8 @@ public class HockeyPlayer {
 	private float stickPower = 5000f;
 
 	public Sprite sprite;
+	public Sprite stickSprite;
+	
 	public Body body;
 	private World world;
 	public Body stick;
@@ -53,6 +58,9 @@ public class HockeyPlayer {
 		this.power = 15000f;
 		
 		createBody();
+		
+		sprite = getPlayerSprite();
+		stickSprite = getStickSprite();
 	}
 	
 	private void createBody()
@@ -122,6 +130,14 @@ public class HockeyPlayer {
 		
 	}
 	
+	public void updateSprite(SpriteBatch spriteBatch)
+	{
+		setSpritePosition(stickSprite, PIXELS_PER_METER, stick, stick);
+		stickSprite.draw(spriteBatch);
+		setSpritePosition(sprite, PIXELS_PER_METER, body, stick);
+		sprite.draw(spriteBatch);
+	}
+	
 	private void createMovementJoint(Vector2 jointStartPoint)
 	{
 		MouseJointDef def = new MouseJointDef();
@@ -160,6 +176,28 @@ public class HockeyPlayer {
 		
 		
 		updateStick(delta, rotation, position);
+	}
+	
+	private Sprite getStickSprite()
+    {
+    	Texture stickTexture = new Texture(Gdx.files.internal("Images/Objects/stick.png"));
+    	
+    	return new Sprite(stickTexture);
+    }
+	
+	private Sprite getPlayerSprite()
+    {
+    	Texture playerTexture = new Texture(Gdx.files.internal("Images/Objects/player_1_noarm.png"));
+    	
+    	return new Sprite(playerTexture);
+    }
+	
+	public void setSpritePosition(Sprite spr, int PIXELS_PER_METER, Body forLocation, Body forAngle)
+	{
+		
+		spr.setPosition(PIXELS_PER_METER * forLocation.getPosition().x - spr.getWidth()/2,
+				PIXELS_PER_METER * forLocation.getPosition().y  - spr.getHeight()/2);
+		spr.setRotation((MathUtils.radiansToDegrees * forAngle.getAngle()));
 	}
 	
 	private Vector3 tempVec = new Vector3(0.0f,0.0f,0.0f);

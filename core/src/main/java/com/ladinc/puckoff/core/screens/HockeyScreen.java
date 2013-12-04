@@ -137,6 +137,12 @@ public class HockeyScreen implements Screen
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
         this.rink.rinkImage.draw(spriteBatch);
+        
+        for(HockeyPlayer hp: hockeyPlayerList)
+		{
+        	hp.updateSprite(spriteBatch);
+		}
+
     }
 	
 	private void createAIPlayer()
