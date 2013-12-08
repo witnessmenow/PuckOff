@@ -1,5 +1,8 @@
 package com.ladinc.puckoff.core.objects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -44,6 +47,9 @@ public class Rink
 		
 		this.worldCenter = center;
 		
+		initiateStartingPositions();
+		resetPositions();
+		
 		this.body = world.createBody(bd);
 		
 		loader.attachFixture(body, "iceRink", fixtureDef, 192);
@@ -65,23 +71,61 @@ public class Rink
 		return new Vector2(this.worldCenter.x, Rink.yAxisCenter);
 	}
 	
+	int lastUsedHomePosition;
+	int lastUsedAwayPosition;
+	
+	public void resetPositions()
+	{
+		lastUsedAwayPosition = 0;
+		lastUsedHomePosition = 0;
+	}
+	
+	private void initiateStartingPositions()
+	{
+		homeStartingPositionList = new ArrayList<StartingPosition>();
+		
+		//Face Off
+		homeStartingPositionList.add(new StartingPosition(new Vector2(this.worldCenter.x - 7.6f, Rink.yAxisCenter), (float)Math.toRadians(180 - 15)));
+		homeStartingPositionList.add(new StartingPosition(new Vector2(this.worldCenter.x - 16.8f, 36.3f), (float)Math.toRadians(180)));
+		homeStartingPositionList.add(new StartingPosition(new Vector2(this.worldCenter.x - 16.8f, 83.2f), (float)Math.toRadians(180)));
+		homeStartingPositionList.add(new StartingPosition(new Vector2(this.worldCenter.x - 56f, Rink.yAxisCenter), (float)Math.toRadians(180)));
+		
+		awayStartingPositionList = new ArrayList<StartingPosition>();
+		
+		awayStartingPositionList.add(new StartingPosition(new Vector2(this.worldCenter.x + 7.6f, Rink.yAxisCenter), (float)Math.toRadians(15)));
+		awayStartingPositionList.add(new StartingPosition(new Vector2(this.worldCenter.x + 16.8f, 36.3f), (float)Math.toRadians(0)));
+		awayStartingPositionList.add(new StartingPosition(new Vector2(this.worldCenter.x + 16.8f, 83.2f), (float)Math.toRadians(0)));
+		awayStartingPositionList.add(new StartingPosition(new Vector2(this.worldCenter.x + 56f, Rink.yAxisCenter), (float)Math.toRadians(0)));
+	}
+	
+	private List<StartingPosition> homeStartingPositionList;
+	private List<StartingPosition> awayStartingPositionList;
+	
 	public StartingPosition getPlayerStartingPosition(Side side, int playerNumber)
 	{
-		Vector2 pos;
-		double angle;
+		int index = 0;
 		
 		if(side == Side.Home)
 		{
-			pos = new Vector2(this.worldCenter.x - 7.6f, Rink.yAxisCenter);
-			angle = 180 - 15;
+			index = lastUsedHomePosition;
+			
+			if((this.lastUsedHomePosition + 1) < this.homeStartingPositionList.size())
+			{
+				this.lastUsedHomePosition++;
+			}
+			
+			return homeStartingPositionList.get(index);
 		}
 		else
 		{
-			pos = new Vector2(this.worldCenter.x + 7.6f, Rink.yAxisCenter);
-			angle = -15;
+			index = lastUsedAwayPosition;
+			
+			if((this.lastUsedAwayPosition + 1) < this.awayStartingPositionList.size())
+			{
+				this.lastUsedAwayPosition++;
+			}
+			
+			return awayStartingPositionList.get(index);
 		}
-		angle = Math.toRadians(angle);
-		
-		return new StartingPosition(pos, (float)angle );
 	}
 }
