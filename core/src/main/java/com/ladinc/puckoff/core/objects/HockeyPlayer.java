@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.ladinc.puckoff.core.controls.IControls;
+import com.ladinc.puckoff.core.utilities.GenericEnums.Side;
 
 public class HockeyPlayer {
 	
@@ -38,7 +39,9 @@ public class HockeyPlayer {
 	public int playerNumber;
 	
 	public IControls controller;
-	Vector2 startPos;
+	StartingPosition startPos;
+	
+	public Side side;
 	
 	private float power;
 
@@ -46,7 +49,7 @@ public class HockeyPlayer {
 	
 	private MouseJoint movementJoint;
 	
-	public HockeyPlayer(World world, int number, IControls controller, Vector2 startPos, OrthographicCamera camera)
+	public HockeyPlayer(World world, int number, Side side, IControls controller, StartingPosition startPos, OrthographicCamera camera)
 	{
 		playerNumber = number;
 		
@@ -55,12 +58,17 @@ public class HockeyPlayer {
 		this.world = world;
 		this.controller = controller;
 		this.startPos = startPos;
-		this.power = 15000f;
+		//this.power = 15000f;
+		this.power = 10000f;
 		
 		createBody();
 		
-		sprite = getPlayerSprite();
-		stickSprite = getStickSprite();
+		this.stick.setTransform(startPos.location, startPos.angle);
+		
+		this.side = side;
+		
+		this.sprite = HockeyPlayer.getPlayerSprite(side);
+		this.stickSprite = HockeyPlayer.getStickSprite();
 	}
 	
 	private void createBody()
@@ -68,7 +76,7 @@ public class HockeyPlayer {
 		//Dynamic Body  
 	    BodyDef bodyDef = new BodyDef();  
 	    bodyDef.type = BodyType.DynamicBody;  
-	    bodyDef.position.set(this.startPos.x, this.startPos.y);
+	    bodyDef.position.set(this.startPos.location.x, this.startPos.location.y);
  
 	    //This keeps it that the force up is applied relative to the screen, rather than the direction that the player is facing
 	    bodyDef.fixedRotation = true;
@@ -104,7 +112,7 @@ public class HockeyPlayer {
 		PolygonShape boxShape = new PolygonShape();
 		boxShape.setAsBox(4f, 0.5f);
 		fixtureDef.shape=boxShape;
-		fixtureDef.restitution=1f;
+		fixtureDef.restitution=0.3f;
 		fixtureDef.density = 1f;
 	    fixtureDef.friction = 0.3f;  
 	    
@@ -178,20 +186,6 @@ public class HockeyPlayer {
 		updateStick(delta, rotation, position);
 	}
 	
-	private Sprite getStickSprite()
-    {
-    	Texture stickTexture = new Texture(Gdx.files.internal("Images/Objects/stick.png"));
-    	
-    	return new Sprite(stickTexture);
-    }
-	
-	private Sprite getPlayerSprite()
-    {
-    	Texture playerTexture = new Texture(Gdx.files.internal("Images/Objects/player_1_noarm.png"));
-    	
-    	return new Sprite(playerTexture);
-    }
-	
 	public void setSpritePosition(Sprite spr, int PIXELS_PER_METER, Body forLocation, Body forAngle)
 	{
 		
@@ -201,85 +195,13 @@ public class HockeyPlayer {
 	}
 	
 	private Vector3 tempVec = new Vector3(0.0f,0.0f,0.0f);
+	private float movementSquareMax = 6f;
+	private Vector2 moveForce = new Vector2();
+	private Vector2 stickCenter = new Vector2();
 	
 	public void updateStick(float delta, Vector2 rotation, Vector2 playerPosition)
 	{
-		Gdx.app.debug("HockeyPlayer - updateStick", "rotation: x=" + String.valueOf(rotation.x) + " y=" + String.valueOf(rotation.y));
-		
-//		if(rotation.x == 0f && rotation.y == 0)
-//		{
-//			//No movement detected, get rid of mouse joint
-//			destroyMovementJoint();
-//		}
-//		else
-//		{
-//			//Movement Square size
-//			float movementSquareMax = 6f;
-//			Vector2 moveForce = new Vector2(rotation.x * movementSquareMax, rotation.y * movementSquareMax);
-//			Vector2 moveLocation = new Vector2(playerPosition.x + moveForce.x, playerPosition.y + moveForce.y);
-//			
-//			Vector2 position= this.stick.getWorldCenter();
-//			
-//			float xDiff = position.x - moveLocation.x;
-//			if (xDiff < 0)
-//				xDiff = xDiff * (-1);
-//			
-//			float yDiff = position.y - moveLocation.y;
-//			if (yDiff < 0)
-//				yDiff = yDiff * (-1);
-//			
-//			
-//			if(xDiff > movementSquareMax)
-//			{
-//				if(position.x < moveLocation.x)
-//				{
-//					moveLocation.x -= movementSquareMax;		
-//				}
-//				else
-//				{
-//					moveLocation.x += movementSquareMax;
-//				}
-//				
-//				if(moveLocation.y < 0)
-//				{
-//					moveLocation.y = playerPosition.y + (-1)*movementSquareMax;
-//				}
-//				else
-//				{
-//					moveLocation.y = playerPosition.y + movementSquareMax;
-//				}
-//			}
-//			else if(yDiff > movementSquareMax)
-//			{
-//				if(position.y < moveLocation.y)
-//				{
-//					moveLocation.y -= movementSquareMax;		
-//				}
-//				else
-//				{
-//					moveLocation.y += movementSquareMax;
-//				}
-//				
-//				if(moveLocation.x < 0)
-//				{
-//					moveLocation.x = playerPosition.x + (-1)*movementSquareMax;
-//				}
-//				else
-//				{
-//					moveLocation.x = playerPosition.x + movementSquareMax;
-//				}	
-//			}
-//			
-//			//Movement Detected
-//			if(this.movementJoint == null)
-//			{
-//				createMovementJoint(position);
-//			}
-//			else
-//			{
-//				movementJoint.setTarget(moveLocation);
-//			}
-		
+		Gdx.app.debug("HockeyPlayer - updateStick", "rotation: x=" + String.valueOf(rotation.x) + " y=" + String.valueOf(rotation.y));		
 		
 		if(rotation.x == 0f && rotation.y == 0)
 		{
@@ -287,34 +209,31 @@ public class HockeyPlayer {
 			return;
 		}
 		
-		//Movement Square size
-		float movementSquareMax = 6f;
-		Vector2 moveForce;
-		
 		if(controller.isRotationRelative())
 		{
+			// We are being given a co-ordinate from the screen, we need to convert this to a movement action
+			// relative to the players position
+			
 			tempVec.set(rotation.x, rotation.y, 0);
 			camera.unproject(tempVec);
+			//temp vec is now the value of the input, but adjusted to match box2ds world
+			
 			
 			//Camera unproject gives us cameras co-ordinates of the input, this needs to be converted to Box2d co-ords 
-			moveForce =  new Vector2(tempVec.x/PIXELS_PER_METER - playerPosition.x, tempVec.y/PIXELS_PER_METER - playerPosition.y);
+			moveForce.x = tempVec.x/PIXELS_PER_METER - playerPosition.x; 
+			moveForce.y = tempVec.y/PIXELS_PER_METER - playerPosition.y;
 			Gdx.app.debug("HockeyPlayer - Rotation Relative", "moveForce: x=" + String.valueOf(moveForce.x) + " y=" + String.valueOf(moveForce.y));	
 		}
 		else
 		{
-			moveForce = new Vector2(rotation.x * movementSquareMax, rotation.y * movementSquareMax);
+			moveForce.x = rotation.x * movementSquareMax; 
+			moveForce.y = rotation.y * movementSquareMax;
 			
 		}
-		//Vector2 moveLocation = new Vector2(playerPosition.x + moveForce.x, playerPosition.y + moveForce.y);
-		Vector2 position= this.stick.getWorldCenter();
-		
-//		float crossToStick = playerPosition.crs(position);
-//		float crossToMovement = playerPosition.crs(moveLocation);
-//			
-//		Gdx.app.debug("HockeyPlayer - Cross Stuff", "rotation: crossToStick=" + String.valueOf(crossToStick) + " crossToMovement=" + String.valueOf(crossToMovement));	
-		
+		stickCenter = this.stick.getWorldCenter();
+			
 		//stickPositionRelativeToPlayer
-		Vector2 stickRelativePlayer = new Vector2(position.x - playerPosition.x, position.y - playerPosition.y);
+		Vector2 stickRelativePlayer = new Vector2(stickCenter.x - playerPosition.x, stickCenter.y - playerPosition.y);
 		float angleStick = stickRelativePlayer.angle();
 		float angleMovement = moveForce.angle();
 		
@@ -326,7 +245,7 @@ public class HockeyPlayer {
 		{
 			//nothing to do
 			Vector2 currentForce = this.stick.getLinearVelocity();
-			this.stick.applyForce(this.stick.getWorldVector(new Vector2(currentForce.x * (-1), currentForce.y * (-1))), position, true );
+			this.stick.applyForce(this.stick.getWorldVector(new Vector2(currentForce.x * (-1), currentForce.y * (-1))), stickCenter, true );
 			
 			return;
 		}
@@ -342,8 +261,30 @@ public class HockeyPlayer {
 		}
 		
 		Vector2 forceVector= new Vector2(0.0f, this.stickPower*direction);
-		this.stick.applyForce(this.stick.getWorldVector(new Vector2(forceVector.x, forceVector.y)), position, true );
+		this.stick.applyForce(this.stick.getWorldVector(new Vector2(forceVector.x, forceVector.y)), stickCenter, true );
 		
 
 	}
+	
+	public static Sprite getStickSprite()
+    {
+    	Texture stickTexture = new Texture(Gdx.files.internal("Images/Objects/stick.png"));
+    	
+    	return new Sprite(stickTexture);
+    }
+	
+	public static Sprite getPlayerSprite(Side side)
+	{
+		Texture playerTexture;
+		
+		if(side == Side.Home)
+			playerTexture = new Texture(Gdx.files.internal("Images/Objects/player_1_noarm.png"));
+		else
+			playerTexture = new Texture(Gdx.files.internal("Images/Objects/player_2_noarm.png"));
+    	
+    	return new Sprite(playerTexture);
+	}
+	
 }
+
+

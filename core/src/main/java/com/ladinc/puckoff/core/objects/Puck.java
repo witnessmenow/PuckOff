@@ -1,6 +1,10 @@
 package com.ladinc.puckoff.core.objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -11,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Puck 
 {
+	private static int PIXELS_PER_METER = 10;
 	
 	public Body body;
 	
@@ -36,6 +41,8 @@ public class Puck
 	    
 	    this.body.createFixture(fixtureDef);
 	    
+	    this.sprite = Puck.getPuckSprite();
+	    
 	}
 	
 	public void update()
@@ -48,6 +55,18 @@ public class Puck
 		this.body.applyForce(this.body.getWorldVector(new Vector2(-(currentVelocity.x*(slowDownMultiplier)), -(currentVelocity.y*(slowDownMultiplier)))), position, true );
 	}
 	
+	public void updateSprite(SpriteBatch spriteBatch)
+	{
+		setSpritePosition(sprite, PIXELS_PER_METER, body);
+		sprite.draw(spriteBatch);
+	}
+	
+	public void setSpritePosition(Sprite spr, int PIXELS_PER_METER, Body forLocation)
+	{		
+		spr.setPosition(PIXELS_PER_METER * forLocation.getPosition().x - spr.getWidth()/2,
+				PIXELS_PER_METER * forLocation.getPosition().y  - spr.getHeight()/2);
+	}
+	
 	public Vector2 getLocation()
 	{
 		return this.body.getWorldCenter();
@@ -58,6 +77,13 @@ public class Puck
 	    returns balls's velocity vector relative to the car
 	    */
 		return this.body.getLocalVector(this.body.getLinearVelocityFromLocalPoint(new Vector2(0, 0)));
+	}
+	
+	public static Sprite getPuckSprite()
+	{
+    	Texture puckTexture = new Texture(Gdx.files.internal("Images/Objects/Puck.png"));
+    	
+    	return new Sprite(puckTexture);
 	}
 
 }

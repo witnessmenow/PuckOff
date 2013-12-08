@@ -20,6 +20,7 @@ import com.ladinc.puckoff.core.objects.HockeyPlayer;
 import com.ladinc.puckoff.core.objects.Puck;
 import com.ladinc.puckoff.core.objects.Rink;
 import com.ladinc.puckoff.core.utilities.DebugUtilities;
+import com.ladinc.puckoff.core.utilities.GenericEnums.Side;
 
 public class HockeyScreen implements Screen 
 {
@@ -84,7 +85,13 @@ public class HockeyScreen implements Screen
 		if(Gdx.input.isKeyPressed(Input.Keys.NUM_0) && aiCoolDown <= 0)
 		{
 			aiCoolDown = 0.5f;
-			createAIPlayer();
+			createAIPlayer(Side.Away);
+		}
+		
+		if(Gdx.input.isKeyPressed(Input.Keys.NUM_9) && aiCoolDown <= 0)
+		{
+			aiCoolDown = 0.5f;
+			createAIPlayer(Side.Home);
 		}
 		
 		if(this.game.controllerManager.checkForNewControllers())
@@ -142,10 +149,12 @@ public class HockeyScreen implements Screen
 		{
         	hp.updateSprite(spriteBatch);
 		}
+        
+        this.puck.updateSprite(spriteBatch);
 
     }
 	
-	private void createAIPlayer()
+	private void createAIPlayer(Side side)
 	{
 		if(AiList == null)
 		{
@@ -157,7 +166,7 @@ public class HockeyScreen implements Screen
 		
 		int nextPlayerNumber = this.hockeyPlayerList.size() + 1;
 		
-		HockeyPlayer hp = new HockeyPlayer(world, nextPlayerNumber, ai, this.center, this.camera);
+		HockeyPlayer hp = new HockeyPlayer(world, nextPlayerNumber, side, ai, this.rink.getPlayerStartingPosition(side, nextPlayerNumber), this.camera);
 		hockeyPlayerList.add(hp);
 		
 		ai.player = hp;
@@ -175,18 +184,20 @@ public class HockeyScreen implements Screen
 	public void show() {
 		world = new World(new Vector2(0.0f, 0.0f), true);
 		
-		this.rink = new Rink(world, this.worldHeight, this.worldWidth);
+		this.rink = new Rink(world, this.worldHeight, this.worldWidth, this.center);
 		
 		spriteBatch = new SpriteBatch();
 		
 		createPlayers();
-		this.puck = new Puck(world, this.center);
+		this.puck = new Puck(world, this.rink.getPuckStartingPoint());
 		
 		if(AiList == null)
 		{
 			AiList = new ArrayList<SimpleAi>();
 		}
 	}
+	
+	private Side lastUsedSide = Side.Away;
 	
 	private void createPlayers()
 	{
@@ -214,8 +225,13 @@ public class HockeyScreen implements Screen
 			
 			if(!controllerHasPlayer)
 			{
+				if(lastUsedSide == Side.Away)
+					lastUsedSide = Side.Home;
+				else
+					lastUsedSide = Side.Away;
+				
 				Gdx.app.debug("Hockey Screen", "createPlayers() - creating new player");
-				hockeyPlayerList.add(new HockeyPlayer(world, nextPlayerNumber, ic, this.center, this.camera));
+				hockeyPlayerList.add(new HockeyPlayer(world, nextPlayerNumber, lastUsedSide, ic, this.rink.getPlayerStartingPosition(lastUsedSide, nextPlayerNumber), this.camera));
 				nextPlayerNumber++;
 			}
 		}
