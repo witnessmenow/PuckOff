@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.ladinc.puckoff.core.controls.IControls;
+import com.ladinc.puckoff.core.utilities.GenericEnums.Identifier;
 import com.ladinc.puckoff.core.utilities.GenericEnums.Side;
 
 public class HockeyPlayer {
@@ -31,6 +32,7 @@ public class HockeyPlayer {
 
 	public Sprite sprite;
 	public Sprite stickSprite;
+	public Sprite identifierSprite;
 	
 	public Body body;
 	private World world;
@@ -69,8 +71,17 @@ public class HockeyPlayer {
 		
 		this.sprite = HockeyPlayer.getPlayerSprite(side);
 		this.stickSprite = HockeyPlayer.getStickSprite();
+		Identifier ident = controller.getIdentifier();
+		if(ident != null)
+		{
+			this.identifierSprite = HockeyPlayer.getIdentifierSprite(ident);
+		}
+		else
+		{
+			this.identifierSprite = null;
+		}
 	}
-	
+
 	private void createBody()
 	{
 		//Dynamic Body  
@@ -136,6 +147,16 @@ public class HockeyPlayer {
 		world.createJoint(revoJoint);
 		
 		
+	}
+	
+	public void updateIdentiferSprite(SpriteBatch spriteBatch)
+	{
+		//this needs to be done sperate as we want other sprites to take priority over it.
+		if(this.identifierSprite != null)
+		{
+			setSpritePosition(identifierSprite, PIXELS_PER_METER, body, body);
+			identifierSprite.draw(spriteBatch);
+		}
 	}
 	
 	public void updateSprite(SpriteBatch spriteBatch)
@@ -283,6 +304,48 @@ public class HockeyPlayer {
 			playerTexture = new Texture(Gdx.files.internal("Images/Objects/player_2_noarm.png"));
     	
     	return new Sprite(playerTexture);
+	}
+	
+	private static int IDENTIFIER_WIDTH = 89;
+	private static int IDENTIFIER_HEIGHT = 88;
+	
+	private static Sprite getIdentifierSprite(Identifier ident) 
+	{
+		Texture identifierTexture = new Texture(Gdx.files.internal("Images/Objects/PlayerIdentifier.png"));
+		
+		int offset;
+		
+		switch(ident)
+		{
+			case blue:
+				offset = 1;
+				break;
+			case darkblue:
+				offset = 5;
+				break;
+			case green:
+				offset = 3;
+				break;
+			case orange:
+				offset = 4;
+				break;
+			case purple:
+				offset = 6;
+				break;
+			case red:
+				offset = 0;
+				break;
+			case yellow:
+				offset = 2;
+				break;
+			default:
+				offset = 0;
+				break;
+			
+		}
+    	
+		//Idenfiers share one pixel, thats why the minus 1 on the offset
+    	return new Sprite(identifierTexture, offset*(IDENTIFIER_WIDTH - 1), 0, IDENTIFIER_WIDTH, IDENTIFIER_HEIGHT);
 	}
 	
 }

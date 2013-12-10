@@ -2,6 +2,7 @@ package com.ladinc.puckoff.core.controls;
 
 import com.badlogic.gdx.math.Vector2;
 import com.ladinc.puckoff.core.controls.listeners.GenericControllerListener;
+import com.ladinc.puckoff.core.utilities.GenericEnums.Identifier;
 
 public class GamePadControls implements IControls
 {
@@ -17,6 +18,8 @@ public class GamePadControls implements IControls
 	private boolean divePressed;
 	
 	public boolean active;
+	
+	private Identifier ident = null;
 	
 	public GamePadControls(GenericControllerListener listen)
 	{
@@ -147,5 +150,18 @@ public class GamePadControls implements IControls
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public Identifier getIdentifier() {
+		// TODO Auto-generated method stub
+		return this.ident;
+	}
+
+	@Override
+	public void setIdentifier(Identifier identifier) {
+		this.ident = identifier;
+		
+	}
+
 
 }

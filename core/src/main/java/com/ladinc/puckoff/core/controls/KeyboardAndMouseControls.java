@@ -3,6 +3,7 @@ package com.ladinc.puckoff.core.controls;
 import com.badlogic.gdx.math.Vector2;
 import com.ladinc.puckoff.core.controls.listeners.GenericControllerListener;
 import com.ladinc.puckoff.core.controls.listeners.KeyboardAndMouseListener;
+import com.ladinc.puckoff.core.utilities.GenericEnums.Identifier;
 
 public class KeyboardAndMouseControls implements IControls
 {
@@ -14,6 +15,8 @@ public class KeyboardAndMouseControls implements IControls
 	private Vector2 movement;
 	
 	public KeyboardAndMouseListener listener;
+	
+	private Identifier ident = null;
 	
 	public KeyboardAndMouseControls(KeyboardAndMouseListener listen)
 	{
@@ -94,6 +97,19 @@ public class KeyboardAndMouseControls implements IControls
 	public boolean isRotationRelative() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+
+	@Override
+	public Identifier getIdentifier() {
+		// TODO Auto-generated method stub
+		return this.ident;
+	}
+
+	@Override
+	public void setIdentifier(Identifier identifier) {
+		this.ident = identifier;
+		
 	}
 
 }

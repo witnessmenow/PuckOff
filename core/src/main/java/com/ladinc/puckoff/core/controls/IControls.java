@@ -1,6 +1,7 @@
 package com.ladinc.puckoff.core.controls;
 
 import com.badlogic.gdx.math.Vector2;
+import com.ladinc.puckoff.core.utilities.GenericEnums.Identifier;
 
 public interface IControls 
 {
@@ -14,6 +15,10 @@ public interface IControls
 	public boolean isActive();
 	
 	public boolean isRotationRelative();
+	
+	public void setIdentifier(Identifier identifier);
+	
+	public Identifier getIdentifier();
 	
 	//TODO: Add start etc
 

@@ -127,7 +127,7 @@ public class HockeyScreen implements Screen
 		
 		
 		
-		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,PIXELS_PER_METER));
+		//debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,PIXELS_PER_METER));
 		
 		
 		
@@ -144,6 +144,12 @@ public class HockeyScreen implements Screen
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
         this.rink.rinkImage.draw(spriteBatch);
+        
+        //we want other players sprites to be drawn on top of the indentifier
+        for(HockeyPlayer hp: hockeyPlayerList)
+		{
+        	hp.updateIdentiferSprite(spriteBatch);
+		}
         
         for(HockeyPlayer hp: hockeyPlayerList)
 		{

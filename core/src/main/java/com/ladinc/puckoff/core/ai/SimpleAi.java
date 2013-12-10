@@ -3,6 +3,7 @@ package com.ladinc.puckoff.core.ai;
 import com.badlogic.gdx.math.Vector2;
 import com.ladinc.puckoff.core.controls.IControls;
 import com.ladinc.puckoff.core.objects.HockeyPlayer;
+import com.ladinc.puckoff.core.utilities.GenericEnums.Identifier;
 
 public class SimpleAi implements IControls{
 	
@@ -70,6 +71,18 @@ public class SimpleAi implements IControls{
 		
 		return temp;
 		
+	}
+
+	@Override
+	public void setIdentifier(Identifier identifier) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Identifier getIdentifier() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

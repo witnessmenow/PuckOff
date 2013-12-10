@@ -1,0 +1,175 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.ladinc.puckoff:puckoff-core:jar:1.0-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ line 38, column 12
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] PuckOff Parent
+[INFO] PuckOff Core
+[INFO] PuckOff Android
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building PuckOff Parent 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-install-plugin:2.3.1:install (default-install) @ puckoff ---
+[INFO] Installing E:\Code\Github\PuckOff\pom.xml to C:\Users\Brian\.m2\repository\com\ladinc\puckoff\puckoff\1.0-SNAPSHOT\puckoff-1.0-SNAPSHOT.pom
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building PuckOff Core 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[WARNING] The POM for extensions:gdx-controllers:jar:0.9.9 is missing, no dependency information available
+[INFO] 
+[INFO] --- maven-source-plugin:2.2.1:jar-no-fork (attach-sources) @ puckoff-core ---
+[INFO] 
+[INFO] --- maven-resources-plugin:2.5:resources (default-resources) @ puckoff-core ---
+[debug] execute contextualize
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory E:\Code\Github\PuckOff\core\src\main\resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.5.1:compile (default-compile) @ puckoff-core ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:2.5:testResources (default-testResources) @ puckoff-core ---
+[debug] execute contextualize
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory E:\Code\Github\PuckOff\core\src\test\resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.5.1:testCompile (default-testCompile) @ puckoff-core ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.10:test (default-test) @ puckoff-core ---
+[INFO] No tests to run.
+[INFO] Surefire report directory: E:\Code\Github\PuckOff\core\target\surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+
+Results :
+
+Tests run: 0, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] 
+[INFO] --- maven-jar-plugin:2.3.2:jar (default-jar) @ puckoff-core ---
+[INFO] 
+[INFO] --- maven-install-plugin:2.3.1:install (default-install) @ puckoff-core ---
+[INFO] Installing E:\Code\Github\PuckOff\core\target\puckoff-core-1.0-SNAPSHOT.jar to C:\Users\Brian\.m2\repository\com\ladinc\puckoff\puckoff-core\1.0-SNAPSHOT\puckoff-core-1.0-SNAPSHOT.jar
+[INFO] Installing E:\Code\Github\PuckOff\core\pom.xml to C:\Users\Brian\.m2\repository\com\ladinc\puckoff\puckoff-core\1.0-SNAPSHOT\puckoff-core-1.0-SNAPSHOT.pom
+[INFO] Installing E:\Code\Github\PuckOff\core\target\puckoff-core-1.0-SNAPSHOT-sources.jar to C:\Users\Brian\.m2\repository\com\ladinc\puckoff\puckoff-core\1.0-SNAPSHOT\puckoff-core-1.0-SNAPSHOT-sources.jar
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building PuckOff Android 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[WARNING] The POM for com.badlogicgames.gdx:gdx-backend-android:jar:0.9.9-SNAPSHOT is invalid, transitive dependencies (if any) will not be available, enable debug logging for more details
+[WARNING] The POM for extensions:gdx-controllers-android:jar:0.9.9 is missing, no dependency information available
+[INFO] 
+[INFO] --- android-maven-plugin:3.6.0:generate-sources (default-generate-sources) @ puckoff-android ---
+[INFO] ANDROID-904-002: Found aidl files: Count = 0
+[INFO] ANDROID-904-002: Found aidl files: Count = 0
+[INFO] Manifest merging disabled. Using project manifest only
+[INFO] C:\DevTools\adt-bundle-windows-x86_64-20130219\sdk\build-tools\17.0.0\aapt.exe [package, -m, -J, E:\Code\Github\PuckOff\android\target\generated-sources\r, -M, E:\Code\Github\PuckOff\android\AndroidManifest.xml, -S, E:\Code\Github\PuckOff\android\res, --auto-add-overlay, -A, E:\Code\Github\PuckOff\android\..\assets, -I, C:\DevTools\adt-bundle-windows-x86_64-20130219\sdk\platforms\android-15\android.jar]
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ puckoff-android ---
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory E:\Code\Github\PuckOff\android\src\main\resources
+[INFO] skip non existing resourceDirectory E:\Code\Github\PuckOff\android\target\generated-sources\extracted-dependencies\src\main\resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.5.1:compile (default-compile) @ puckoff-android ---
+[WARNING] File encoding has not been set, using platform encoding Cp1252, i.e. build is platform dependent!
+[INFO] Compiling 2 source files to E:\Code\Github\PuckOff\android\target\classes
+[INFO] 
+[INFO] --- android-maven-plugin:3.6.0:proguard (default-proguard) @ puckoff-android ---
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ puckoff-android ---
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory E:\Code\Github\PuckOff\android\src\test\resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.5.1:testCompile (default-testCompile) @ puckoff-android ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.12.2:test (default-test) @ puckoff-android ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- android-maven-plugin:3.6.0:emma (default-emma) @ puckoff-android ---
+[INFO] 
+[INFO] --- android-maven-plugin:3.6.0:dex (default-dex) @ puckoff-android ---
+[INFO] C:\Program Files\Java\jdk1.7.0\jre\bin\java [-Xmx1024m, -jar, C:\DevTools\adt-bundle-windows-x86_64-20130219\sdk\build-tools\17.0.0\lib\dx.jar, --dex, --output=E:\Code\Github\PuckOff\android\target\classes.dex, C:\Users\Brian\.m2\repository\com\badlogicgames\gdx\gdx-backend-android\0.9.9-SNAPSHOT\gdx-backend-android-0.9.9-SNAPSHOT.jar, C:\Users\Brian\.m2\repository\com\badlogicgames\gdx\gdx\0.9.9-SNAPSHOT\gdx-0.9.9-SNAPSHOT.jar, C:\Users\Brian\.m2\repository\extensions\gdx-controllers\0.9.9\gdx-controllers-0.9.9.jar, C:\Users\Brian\.m2\repository\extensions\gdx-controllers-android\0.9.9\gdx-controllers-android-0.9.9.jar, E:\Code\Github\PuckOff\android\target\classes, E:\Code\Github\PuckOff\core\target\puckoff-core-1.0-SNAPSHOT.jar]
+[INFO] 
+[INFO] --- maven-nativedependencies-plugin:0.0.7:copy (default) @ puckoff-android ---
+[INFO] Saving natives in E:\Code\Github\PuckOff\android\libs
+[INFO] Storing artifacts in separate dirs according to classifier
+[INFO] G:com.badlogicgames.gdx - A:gdx-platform - C:natives-armeabi
+[info] Copying natives from gdx-platform-0.9.9-SNAPSHOT-natives-armeabi.jar
+[info] Copying native - META-INF/
+[info] Copying native - META-INF/MANIFEST.MF
+[info] Copying native - libgdx.so
+[INFO] G:com.badlogicgames.gdx - A:gdx-platform - C:natives-armeabi-v7a
+[info] Copying natives from gdx-platform-0.9.9-SNAPSHOT-natives-armeabi-v7a.jar
+[info] Copying native - META-INF/
+[info] Copying native - META-INF/MANIFEST.MF
+[info] Copying native - libgdx.so
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ puckoff-android ---
+[INFO] Building jar: E:\Code\Github\PuckOff\android\target\puckoff-android.jar
+[INFO] 
+[INFO] --- android-maven-plugin:3.6.0:apk (default-apk) @ puckoff-android ---
+[INFO] Copying local assets files to combined assets directory.
+[INFO] Enabling debug build for apk.
+[INFO] C:\DevTools\adt-bundle-windows-x86_64-20130219\sdk\build-tools\17.0.0\aapt.exe [package, -f, -M, E:\Code\Github\PuckOff\android\AndroidManifest.xml, -S, E:\Code\Github\PuckOff\android\res, --auto-add-overlay, -A, E:\Code\Github\PuckOff\android\target\generated-sources\combined-assets\assets, -I, C:\DevTools\adt-bundle-windows-x86_64-20130219\sdk\platforms\android-15\android.jar, -F, E:\Code\Github\PuckOff\android\target\puckoff-android.ap_, --debug-mode]
+[INFO] Warning: AndroidManifest.xml already defines debuggable (in http://schemas.android.com/apk/res/android); using existing value in manifest.
+[WARNING] The POM for com.badlogicgames.gdx:gdx-backend-android:jar:0.9.9-SNAPSHOT is invalid, transitive dependencies (if any) will not be available, enable debug logging for more details
+[WARNING] The POM for extensions:gdx-controllers-android:jar:0.9.9 is missing, no dependency information available
+[WARNING] The POM for extensions:gdx-controllers:jar:0.9.9 is missing, no dependency information available
+[WARNING] The POM for com.badlogicgames.gdx:gdx-backend-android:jar:0.9.9-SNAPSHOT is invalid, transitive dependencies (if any) will not be available, enable debug logging for more details
+[WARNING] The POM for extensions:gdx-controllers-android:jar:0.9.9 is missing, no dependency information available
+[WARNING] The POM for extensions:gdx-controllers:jar:0.9.9 is missing, no dependency information available
+[WARNING] The POM for com.badlogicgames.gdx:gdx-backend-android:jar:0.9.9-SNAPSHOT is invalid, transitive dependencies (if any) will not be available, enable debug logging for more details
+[WARNING] The POM for extensions:gdx-controllers-android:jar:0.9.9 is missing, no dependency information available
+[WARNING] The POM for extensions:gdx-controllers:jar:0.9.9 is missing, no dependency information available
+[WARNING] The POM for com.badlogicgames.gdx:gdx-backend-android:jar:0.9.9-SNAPSHOT is invalid, transitive dependencies (if any) will not be available, enable debug logging for more details
+[WARNING] The POM for extensions:gdx-controllers-android:jar:0.9.9 is missing, no dependency information available
+[WARNING] The POM for extensions:gdx-controllers:jar:0.9.9 is missing, no dependency information available
+[INFO] Add native libraries from E:\Code\Github\PuckOff\android\libs
+[INFO] 
+[INFO] --- android-maven-plugin:3.6.0:internal-pre-integration-test (default-internal-pre-integration-test) @ puckoff-android ---
+[INFO] No InstrumentationRunner found - skipping tests
+[INFO] 
+[INFO] --- android-maven-plugin:3.6.0:internal-integration-test (default-internal-integration-test) @ puckoff-android ---
+[INFO] No InstrumentationRunner found - skipping tests
+[INFO] 
+[INFO] --- maven-install-plugin:2.3.1:install (default-install) @ puckoff-android ---
+[INFO] Installing E:\Code\Github\PuckOff\android\target\puckoff-android.apk to C:\Users\Brian\.m2\repository\com\ladinc\puckoff\puckoff-android\1.0-SNAPSHOT\puckoff-android-1.0-SNAPSHOT.apk
+[INFO] Installing E:\Code\Github\PuckOff\android\pom.xml to C:\Users\Brian\.m2\repository\com\ladinc\puckoff\puckoff-android\1.0-SNAPSHOT\puckoff-android-1.0-SNAPSHOT.pom
+[INFO] Installing E:\Code\Github\PuckOff\android\target\puckoff-android.jar to C:\Users\Brian\.m2\repository\com\ladinc\puckoff\puckoff-android\1.0-SNAPSHOT\puckoff-android-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- android-maven-plugin:3.6.0:deploy (deploy-on-install) @ puckoff-android ---
+[INFO] C:\DevTools\adt-bundle-windows-x86_64-20130219\sdk\build-tools\17.0.0\aapt.exe [dump, xmltree, E:\Code\Github\PuckOff\android\target\puckoff-android.apk, AndroidManifest.xml]
+[INFO] Waiting for initial device list from the Android Debug Bridge
+[INFO] Found 1 devices connected with the Android Debug Bridge
+[INFO] android.device parameter not set, using all attached devices
+[INFO] Device 015d483b6328200a_OUYA_OUYAConsole found.
+[INFO] 015d483b6328200a_OUYA_OUYAConsole :   Successfully uninstalled com.ladinc.puckoff.android from 015d483b6328200a_OUYA_OUYAConsole
+[INFO] Found 1 devices connected with the Android Debug Bridge
+[INFO] android.device parameter not set, using all attached devices
+[INFO] Device 015d483b6328200a_OUYA_OUYAConsole found.
+[INFO] 015d483b6328200a_OUYA_OUYAConsole :   Successfully installed E:\Code\Github\PuckOff\android\target\puckoff-android.apk to 015d483b6328200a_OUYA_OUYAConsole
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] 
+[INFO] PuckOff Parent .................................... SUCCESS [0.092s]
+[INFO] PuckOff Core ...................................... SUCCESS [0.783s]
+[INFO] PuckOff Android ................................... SUCCESS [13.061s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 14.735s
+[INFO] Finished at: Mon Dec 09 00:12:22 GMT 2013
+[INFO] Final Memory: 29M/349M
+[INFO] ------------------------------------------------------------------------

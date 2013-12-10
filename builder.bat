@@ -35,7 +35,7 @@ PAUSE > NUL
 GOTO start
 
 :Android
-call %M2%/mvn -Pandroid install
+call %M2%/mvn -Pandroid install > output.txt
 pause
 GOTO start
 
