@@ -127,7 +127,7 @@ public class HockeyScreen implements Screen
 		
 		
 		
-		//debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,PIXELS_PER_METER));
+		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,PIXELS_PER_METER));
 		
 		
 		
@@ -196,6 +196,8 @@ public class HockeyScreen implements Screen
 		
 		createPlayers();
 		this.puck = new Puck(world, this.rink.getPuckStartingPoint());
+		
+		this.rink.createScoringZones(world, this.puck.puckSize*2);
 		
 		if(AiList == null)
 		{

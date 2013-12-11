@@ -19,7 +19,7 @@ public class Puck
 	
 	public Body body;
 	
-	float puckSize = 1f;
+	public float puckSize = 1f;
 	float slowDownMultiplier = 0.2f;
 	
 	public Sprite sprite;
