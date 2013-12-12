@@ -131,7 +131,7 @@ public class Rink
 	
 	public void createScoringZones(World world, float puckSize)
 	{
-		//this.leftGoal.createScoringZone(world, puckSize);
+		this.leftGoal.createScoringZone(world, puckSize);
 		this.rightGoal.createScoringZone(world, puckSize);
 	}
 }

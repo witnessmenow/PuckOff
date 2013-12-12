@@ -18,7 +18,7 @@ public class PuckOff extends Game {
 	public void create () 
 	{
 		//Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		Gdx.app.setLogLevel(Application.LOG_ERROR);
+		Gdx.app.setLogLevel(Application.LOG_INFO);
 		
 		controllerManager = new MyControllerManager();
 		

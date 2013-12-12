@@ -12,6 +12,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ladinc.puckoff.core.collision.CollisionInfo;
+import com.ladinc.puckoff.core.collision.CollisionInfo.CollisionObjectType;
 
 public class Puck 
 {
@@ -19,13 +21,20 @@ public class Puck
 	
 	public Body body;
 	
+	public HockeyPlayer lastPlayerToTouch;
+	
 	public float puckSize = 1f;
 	float slowDownMultiplier = 0.2f;
 	
 	public Sprite sprite;
 	
+	Vector2 startPos; 
+	
 	public Puck(World world, Vector2 startPos)
 	{
+		
+		lastPlayerToTouch = null;
+		this.startPos = startPos;
 		
 		BodyDef bodyDef = new BodyDef();  
 	    bodyDef.type = BodyType.DynamicBody;  
@@ -40,9 +49,18 @@ public class Puck
 	    fixtureDef.restitution = 0.5f;
 	    
 	    this.body.createFixture(fixtureDef);
+	    this.body.setUserData(new CollisionInfo("", CollisionObjectType.Puck));
+	    
+	    dynamicCircle.dispose();
 	    
 	    this.sprite = Puck.getPuckSprite();
 	    
+	}
+	
+	public void resetPuck()
+	{
+		lastPlayerToTouch = null;
+		this.body.setTransform(startPos, 0);
 	}
 	
 	public void update()

@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ladinc.puckoff.core.collision.CollisionInfo;
+import com.ladinc.puckoff.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.puckoff.core.utilities.GenericEnums;
 import com.ladinc.puckoff.core.utilities.GenericEnums.Direction;
 
@@ -75,10 +77,6 @@ public class Goal
 		
 		ySize -= goalThickness;
 		
-		
-//		zoneCenter.x = 0;
-//		zoneCenter.y = 0;
-		
 		//init body 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -93,6 +91,9 @@ public class Goal
 		zoneShape.setAsBox(xSize/2, ySize/2);
 		fixtureDef.shape = zoneShape;
 		this.scoringZone.createFixture(fixtureDef);
+		
+		this.scoringZone.setUserData(new CollisionInfo("", CollisionObjectType.ScoreZone));
+		
 		zoneShape.dispose();
 	}
 	

@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.puckoff.core.PuckOff;
 import com.ladinc.puckoff.core.ai.SimpleAi;
+import com.ladinc.puckoff.core.collision.CollisionHelper;
 import com.ladinc.puckoff.core.controls.IControls;
 import com.ladinc.puckoff.core.objects.HockeyPlayer;
 import com.ladinc.puckoff.core.objects.Puck;
@@ -50,6 +51,8 @@ public class HockeyScreen implements Screen
     private Puck puck;
     private List<SimpleAi> AiList;
     
+    public CollisionHelper colHelper;
+    
     public HockeyScreen(PuckOff game)
     {
     	this.game = game;
@@ -66,6 +69,8 @@ public class HockeyScreen implements Screen
         this.camera.setToOrtho(false, this.screenWidth, this.screenHeight);
         
         this.debugRenderer = new Box2DDebugRenderer();
+        
+        colHelper = new CollisionHelper();
     }
     
     private float aiCoolDown = 0;
@@ -189,7 +194,7 @@ public class HockeyScreen implements Screen
 	@Override
 	public void show() {
 		world = new World(new Vector2(0.0f, 0.0f), true);
-		
+		world.setContactListener(this.colHelper);
 		this.rink = new Rink(world, this.worldHeight, this.worldWidth, this.center);
 		
 		spriteBatch = new SpriteBatch();
