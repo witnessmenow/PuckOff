@@ -7,8 +7,10 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -53,6 +55,9 @@ public class HockeyScreen implements Screen
     
     public CollisionHelper colHelper;
     
+    private int homeScore;
+    private int awayScore;
+    
     public HockeyScreen(PuckOff game)
     {
     	this.game = game;
@@ -71,17 +76,14 @@ public class HockeyScreen implements Screen
         this.debugRenderer = new Box2DDebugRenderer();
         
         colHelper = new CollisionHelper();
+        
+        resetGame();
     }
     
     private float aiCoolDown = 0;
     
-    //This is the main game loop, it is repeatedly called
-	@Override
-	public void render(float delta) 
-	{
-		camera.update();
-		spriteBatch.setProjectionMatrix(camera.combined);
-		
+    private void aiCreationLoop(float delta)
+    {
 		if(aiCoolDown > 0)
 		{
 			aiCoolDown -= delta;
@@ -98,29 +100,87 @@ public class HockeyScreen implements Screen
 			aiCoolDown = 0.5f;
 			createAIPlayer(Side.Home);
 		}
+    }
+    
+    private float goalCoolOffTimer = 0f;
+    private boolean processingGoal = false;
+    private Side lastSideToScore;
+    private void handleGoalScored()
+    {
+    	if(this.colHelper.getLastScored() == Side.Home)
+    	{
+    		//Goal was in home's new, goal for away team
+    		awayScore ++;
+    		lastSideToScore = Side.Away;
+    	}
+    	else
+    	{
+    		homeScore ++;
+    		lastSideToScore = Side.Home;
+    	}
+    	
+    	goalCoolOffTimer = 5.0f;
+    	processingGoal = true;
+    }
+    
+    //This is the main game loop, it is repeatedly called
+	@Override
+	public void render(float delta) 
+	{
+		camera.update();
+		spriteBatch.setProjectionMatrix(camera.combined);
+		
+		aiCreationLoop(delta);
 		
 		if(this.game.controllerManager.checkForNewControllers())
 		{
 			createPlayers();
 		}
-		
-		world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
-        world.clearForces();
         
-        for(SimpleAi ai: AiList)
-        {
-        	ai.movementFollowPuck(ai.player.body.getWorldCenter(), this.puck.body.getWorldCenter());
-        }
         
-        for(HockeyPlayer hp: hockeyPlayerList)
+		if(processingGoal)
 		{
-        	hp.updateMovement(delta);
+			goalCoolOffTimer -= delta;
+			if(goalCoolOffTimer <= 0)
+			{
+				processingGoal = false;
+				restartPositions();
+						
+			}
 		}
-        
+		
+		if(this.colHelper.newScore && !processingGoal)
+		{
+			handleGoalScored();
+		}
+		else
+		{
+	        for(SimpleAi ai: AiList)
+	        {
+	        	ai.movementFollowPuck(ai.player.body.getWorldCenter(), this.puck.body.getWorldCenter());
+	        }
+	        
+	        for(HockeyPlayer hp: hockeyPlayerList)
+			{
+	        	if(processingGoal)
+	        	{
+	        		if(hp.side == lastSideToScore)
+	        		{
+	        			//This allows the scoring team to beat the other team around
+	        			hp.updateMovement(delta);
+	        		}
+	        	}
+	        	else
+	        	{
+	        		hp.updateMovement(delta);
+	        	}
+			}
+		}
+		
         this.puck.update();
         
         
-        world.step(Gdx.app.getGraphics().getDeltaTime(), 100, 100);
+        world.step(Gdx.app.getGraphics().getDeltaTime(), 200, 200);
         //world.clearForces();
         //world.step(1/60f, 3, 3);
         world.clearForces();
@@ -162,8 +222,43 @@ public class HockeyScreen implements Screen
 		}
         
         this.puck.updateSprite(spriteBatch);
+        
+        showScores(spriteBatch);
 
     }
+	
+	float ScoresX = 55;
+	float ScoresY = 15;
+	BitmapFont scoresFont;
+	
+	private void showScores(SpriteBatch spriteBatch)
+	{
+		
+		if(scoresFont == null)
+		{
+			scoresFont = new BitmapFont();
+			scoresFont.setColor(Color.GREEN);
+		}
+		
+		scoresFont.draw(spriteBatch, "Score (placeholder) - " + this.homeScore + " : " + this.awayScore, ScoresX, ScoresY);
+		
+	}
+	
+	private void restartPositions()
+	{
+        for(HockeyPlayer hp: hockeyPlayerList)
+		{
+        	hp.resetPosition();
+		}
+        
+        this.puck.resetPuck();
+	}
+	
+	private void resetGame()
+	{
+		this.homeScore = 0;
+		this.awayScore = 0;
+	}
 	
 	private void createAIPlayer(Side side)
 	{

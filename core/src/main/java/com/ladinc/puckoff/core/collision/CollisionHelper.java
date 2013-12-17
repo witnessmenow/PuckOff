@@ -28,6 +28,12 @@ public class CollisionHelper implements ContactListener{
 	private Side lastScore;
 	public boolean newScore = false;
 	
+	public Side getLastScored()
+	{
+		newScore = false;
+		return lastScore;
+	}
+	
 	@Override
 	public void beginContact(Contact contact) 
 	{
@@ -46,8 +52,17 @@ public class CollisionHelper implements ContactListener{
         	if((bodyAInfo.type == CollisionObjectType.ScoreZone && bodyBInfo.type == CollisionObjectType.Puck) || 
         			(bodyAInfo.type == CollisionObjectType.Puck && bodyBInfo.type == CollisionObjectType.ScoreZone))
         	{
-        		
+
+        		//Goal Scored
         		Gdx.app.log("beginContact", "Goal Scored!");
+        		
+        		if(bodyAInfo.type == CollisionObjectType.ScoreZone)
+        			lastScore = bodyAInfo.side;
+        		else
+        			lastScore = bodyBInfo.side;
+        		
+        		newScore = true;
+        		
         	}
         	//Check for collision of two players
         	if(bodyAInfo.type == CollisionObjectType.Player && bodyBInfo.type == CollisionObjectType.Player)

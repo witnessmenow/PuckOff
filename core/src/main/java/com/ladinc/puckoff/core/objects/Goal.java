@@ -10,6 +10,7 @@ import com.ladinc.puckoff.core.collision.CollisionInfo;
 import com.ladinc.puckoff.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.puckoff.core.utilities.GenericEnums;
 import com.ladinc.puckoff.core.utilities.GenericEnums.Direction;
+import com.ladinc.puckoff.core.utilities.GenericEnums.Side;
 
 public class Goal 
 {
@@ -27,19 +28,19 @@ public class Goal
 	//How Long the goals are
 	private static float barLength = 18;
 	
-	GenericEnums.Direction facing;
+	Side side;
 	
 	float goalLineX;
 	float goalY;
 	
-	public Goal(World world, float x, float y, GenericEnums.Direction facing)
+	public Goal(World world, float x, float y, Side side)
     {
     	
     	int direction = 1;
     	
-    	this.facing = facing;
+    	this.side = side;
     	
-		if(facing == GenericEnums.Direction.right)
+		if(side == Side.Away)
 			direction = -1;
     		
     	
@@ -64,7 +65,7 @@ public class Goal
 		
 		float xSize;
 		
-		if (facing == Direction.left)
+		if (side == Side.Home)
 		{
 			xSize = (this.back.body.getPosition().x - goalThickness/2 + postLength - puckSize) - (this.back.body.getPosition().x + goalThickness/2);
 			zoneCenter.x =(this.back.body.getPosition().x + goalThickness/2) + xSize/2;
@@ -92,7 +93,7 @@ public class Goal
 		fixtureDef.shape = zoneShape;
 		this.scoringZone.createFixture(fixtureDef);
 		
-		this.scoringZone.setUserData(new CollisionInfo("", CollisionObjectType.ScoreZone));
+		this.scoringZone.setUserData(new CollisionInfo("", CollisionObjectType.ScoreZone, side));
 		
 		zoneShape.dispose();
 	}

@@ -54,8 +54,8 @@ public class Rink
 		
 		loader.attachFixture(body, "iceRink", fixtureDef, 192);
 		
-		leftGoal = new Goal(world, 30f, yAxisCenter, GenericEnums.Direction.left);
-		rightGoal = new Goal(world, worldWidth - 30f, yAxisCenter, GenericEnums.Direction.right);
+		leftGoal = new Goal(world, 30f, yAxisCenter, Side.Home);
+		rightGoal = new Goal(world, worldWidth - 30f, yAxisCenter, Side.Away);
 		
 	}
 	

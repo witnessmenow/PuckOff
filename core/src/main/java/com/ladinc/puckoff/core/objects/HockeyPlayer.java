@@ -65,7 +65,7 @@ public class HockeyPlayer {
 		
 		createBody();
 		
-		this.stick.setTransform(startPos.location, startPos.angle);
+		resetPosition();
 		
 		this.side = side;
 		
@@ -80,6 +80,18 @@ public class HockeyPlayer {
 		{
 			this.identifierSprite = null;
 		}
+	}
+	
+	public void resetPosition()
+	{
+		this.stick.setTransform(startPos.location, startPos.angle);
+		this.body.setTransform(startPos.location, 0f);
+		
+		this.body.setLinearVelocity(0f,0f);
+		this.body.setAngularVelocity(0f);
+		
+		this.stick.setLinearVelocity(0f,0f);
+		this.stick.setAngularVelocity(0f);
 	}
 
 	private void createBody()

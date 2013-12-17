@@ -60,6 +60,10 @@ public class Puck
 	public void resetPuck()
 	{
 		lastPlayerToTouch = null;
+		
+		this.body.setLinearVelocity(0f,0f);
+		this.body.setAngularVelocity(0f);
+		
 		this.body.setTransform(startPos, 0);
 	}
 	
